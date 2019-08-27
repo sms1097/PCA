@@ -1,2 +1,2 @@
 # PCA
-Implements Principal Comonents Analysis to assess influence of principal components on variability of data. 
+Implements Principal Comonents Analysis to assess influence of principal components on variability of data. Makes covariance matrix and finds eigen vectors and eigen values. From there will return standard deviations and matrix with Principal Components. Optional summarize function will figure out how many Principal Componenets to keep in order to explain at lead 99% of the variability in the data (by default, this value can be changed if the user desires.)
