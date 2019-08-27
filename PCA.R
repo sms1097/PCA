@@ -1,24 +1,24 @@
-PCA <- function(x, summary, expVarPer) {
+PCA <- function(x, s = F, expVarPer = 0.99) {
   require(ggplot2)
   require(ggfortify)
   
-  #Center Data
+  #center the data
   cen(x)
   
   #Find eigenvalues and eigenvectors of covariance matrix (principal components)
-  eVal <<- eigen(cov(x))$values
-  eVec <<- eigen(cov(x))$vectors
+  eVal <- eigen(cov(x))$values
+  eVec <- eigen(cov(x))$vectors
   
-  #return principal components
-  cat("standard deviations: \n")
-  cat(sqrt(eval), "\n\n")
-  
-  if (summary.isNull()) {
-    for (i in 1:ncol(x))
-      cat("PC", i)
+  if (s == FALSE) {
+    #return principal components
+    cat("standard deviations: \n")
+    print(sqrt(eVal))
+    cat("\n")
+    cat("Principal components from 1 to", ncol(eVec))
+    cat("\n")
     return(eVec)
   } else {
-    summarize(x)
+    summarize(x, expVarPer, eVal, eVec)
   }
 }
 
@@ -35,9 +35,12 @@ cen <- function(x) {
   }
 }
 
-summarize <- function(x, expVarPer) {
+
+
+summarize <- function(x, expVarPer, eVal, eVec) {
+  
   #Make list of eVal, eVec pairs sorted descending
-  ePairs <- matrix(nrow = ncol(eVec) * nrow(eVec), ncol = 2)
+  ePairs <- matrix(nrow = (ncol(eVec) * nrow(eVec)), ncol = 2)
   temp <- 0
   for (j in 1:ncol(eVec)) {
     for (i in 1:nrow(eVec)) {
@@ -57,8 +60,8 @@ summarize <- function(x, expVarPer) {
   cumVar <- cumsum(varExp)
   vectokeep <- 0
   
-  for (i in 1:length(varexp)) {
-    if (expvarper <- cumvar[i]) {
+  for (i in 1:length(varExp)) {
+    if (expVarPer <= cumVar[i]) {
       break
     } else {
       vectokeep <- vectokeep + 1
@@ -66,5 +69,5 @@ summarize <- function(x, expVarPer) {
   }
   
   cat("Use first", vectokeep, "Principal components to expalain", 
-      expVarPer, "% of variability in data." )
+    cumVar[vectokeep] * 100, "% of variability in the data.")
 }
