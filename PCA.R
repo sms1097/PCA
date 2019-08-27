@@ -29,7 +29,7 @@ cen <- function(x) {
       
       for (j in 1:nrow(x)) {
         if (!is.na(x[j, i]))
-          x[j, i] <<- (x[j, i] - mu)
+          x[j, i] <- (x[j, i] - mu)
       }
     }
   }
